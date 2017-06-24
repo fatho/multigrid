@@ -1,0 +1,10 @@
+[package]
+
+name = "multigrid"
+version = "0.0.1"
+authors = [ "Fabian Thorand <f.thorand@gmail.com>" ]
+
+[dependencies]
+
+nalgebra = "0.12"
+image = "0.14"
