@@ -10,3 +10,5 @@ pub enum CycleType {
     WCycle,
     FCycle
 }
+
+pub mod geometric;
