@@ -6,8 +6,6 @@ authors = [ "Fabian Thorand <f.thorand@gmail.com>" ]
 
 [dependencies]
 
-nalgebra = "0.12"
 image = "0.14"
-
 ndarray = "0.9"
 itertools = "0.6"

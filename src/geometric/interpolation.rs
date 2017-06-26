@@ -1,19 +1,23 @@
 use ndarray::Array2;
-use util::shape2;
 
+/// Interpolates from a `(m + 1) * (n + 1)` coarse grid to a `(2m + 1) * (2n + 1)` fine grid.
 pub fn interpolate(coarse : &Array2<f64>, fine : &mut Array2<f64>) {
-    let (cnr, cnc) = shape2(coarse);
-    let (fnr, fnc) = shape2(fine);
+    let (cnr, cnc) = coarse.dim();
+    let (fnr, fnc) = fine.dim();
 
     assert_eq!((fnr - 1) / 2, cnr - 1);
     assert_eq!((fnc - 1) / 2, cnc - 1);
 
     // copy exact data points
-    fine.slice_with_steps_mut((0,0),(cnr,cnc),(2,2)).copy_from(coarse);
+    for i in 0..cnr {
+        for j in 0..cnc {
+            fine[(i*2,j*2)] = coarse[(i,j)]
+        }
+    }
 
     // interpolate everything but right/bottom boundary
-    for j in 0..cnc - 1 {
-        for i in 0..cnr - 1 {
+    for i in 0..cnr - 1 {
+        for j in 0..cnc - 1 {
             fine[(i*2+1,j*2)] = 0.5 * (coarse[(i,j)] + coarse[(i+1,j)]);
             fine[(i*2,j*2+1)] = 0.5 * (coarse[(i,j)] + coarse[(i,j+1)]);
             fine[(i*2+1,j*2+1)] = 0.25 * (coarse[(i,j)] + coarse[(i,j+1)] + coarse[(i+1,j)] + coarse[(i+1,j+1)]);

@@ -1,17 +1,16 @@
 use ndarray::Array2;
-use util::shape2;
 
-/// Halfweight-restriction
+/// Halfweight-restriction from a `(2m+1) * (2n+1)` fine grid to a `(m+1) * (n+1)` coarse grid.
 pub fn halfweight(fine : &Array2<f64>, coarse : &mut Array2<f64>) {
-    let (cnr, cnc) = shape2(coarse);
-    let (fnr, fnc) = shape2(fine);
+    let (cnr, cnc) = coarse.dim();
+    let (fnr, fnc) = fine.dim();
 
     assert_eq!((fnr - 1) / 2, cnr - 1);
     assert_eq!((fnc - 1) / 2, cnc - 1);
 
     // restrict center of matrix
-    for j in 2..fnc - 2 {
-        for i in 2..fnr - 2 {
+    for i in 2..fnr - 2 {
+        for j in 2..fnc - 2 {
             coarse[(i/2,j/2)] = (4. * fine[(i,j)] + fine[(i-1,j)] + fine[(i+1,j)] + fine[(i,j-1)] + fine[(i,j+1)]) / 8.
         }
     }
