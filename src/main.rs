@@ -58,8 +58,8 @@ fn restrict_halfweight(fine : &nalgebra::DMatrix<f64>, coarse : &mut nalgebra::D
     assert_eq!((fnc - 1) / 2, cnc - 1);
 
     // restrict center of matrix
-    for i in 2..fnr - 2 {
-        for j in 2..fnc - 2 {
+    for j in 2..fnc - 2 {
+        for i in 2..fnr - 2 {
             coarse[(i/2,j/2)] = (4. * fine[(i,j)] + fine[(i-1,j)] + fine[(i+1,j)] + fine[(i,j-1)] + fine[(i,j+1)]) / 8.
         }
     }
@@ -92,8 +92,8 @@ fn interpolate(coarse : &nalgebra::DMatrix<f64>, fine : &mut nalgebra::DMatrix<f
     fine.slice_with_steps_mut((0,0),(cnr,cnc),(2,2)).copy_from(coarse);
 
     // interpolate everything but right/bottom boundary
-    for i in 0..cnr - 1 {
-        for j in 0..cnc - 1 {
+    for j in 0..cnc - 1 {
+        for i in 0..cnr - 1 {
             fine[(i*2+1,j*2)] = 0.5 * (coarse[(i,j)] + coarse[(i+1,j)]);
             fine[(i*2,j*2+1)] = 0.5 * (coarse[(i,j)] + coarse[(i,j+1)]);
             fine[(i*2+1,j*2+1)] = 0.25 * (coarse[(i,j)] + coarse[(i,j+1)] + coarse[(i+1,j)] + coarse[(i+1,j+1)]);
@@ -116,8 +116,8 @@ fn poisson_relax(u : &mut nalgebra::DMatrix<f64>, f : &nalgebra::DMatrix<f64>, h
     let (nr, nc) = u.shape();
     let h2 = h*h;
 
-    for i in 1..nr-1 {
-        for j in 1..nc - 1 {
+    for j in 1..nc - 1 {
+        for i in 1..nr-1 {
             u[(i,j)] = -0.25 * (h2 * f[(i,j)] - u[(i-1,j)] - u[(i+1,j)] - u[(i,j-1)] - u[(i,j+1)])
         }
     }
@@ -132,8 +132,8 @@ fn poisson_residual(u : & nalgebra::DMatrix<f64>, f : & nalgebra::DMatrix<f64>, 
 
     let h2inv = 1. / (h * h);
 
-    for i in 1..nr-1 {
-        for j in 1..nc-1 {
+    for j in 1..nc-1 {
+        for i in 1..nr-1 {
             r[(i,j)] = f[(i,j)] - h2inv * (u[(i-1,j)] + u[(i+1,j)] + u[(i,j-1)] + u[(i,j+1)] - 4. * u[(i,j)])
         }
     }
