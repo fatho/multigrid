@@ -45,11 +45,7 @@ fn save_plot(data : &Array2<f64>, filename : &str) {
             image::Luma([(255. * norm).trunc() as u8])
         });
 
-        let ref mut fout = File::create(&Path::new(filename)).unwrap();
-
-        // We must indicate the image’s color type and what format to save as
-//        let _ = image::ImageRgb8(imgbuf).save(fout, image::PNG);
-        let _ = image::ImageLuma8(imgbuf).save(fout, image::PNG);
+        let _ = image::DynamicImage::ImageLuma8(imgbuf).save(filename);
     }
 }
 

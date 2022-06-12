@@ -6,6 +6,6 @@ authors = [ "Fabian Thorand <f.thorand@gmail.com>" ]
 
 [dependencies]
 
-image = "0.14"
-ndarray = "0.9"
-itertools = "0.6"
+image = "0.24.2"
+ndarray = "0.15.4"
+itertools = "0.10.3"
